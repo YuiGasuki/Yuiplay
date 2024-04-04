@@ -5,7 +5,7 @@
 <div style="background:#aaaaaa;overflow:auto;color:#eee;padding:32px;border-radius:8px;">
 &#60;div id="Yuiplay_box" <br>
     data-ThemeColor="#DB000A"
-   <br> data-Playlist='{<br>"name":"播放音乐的标题",<br>"path":"播放音乐的路径"<br>}'&#62;&#60;/div&#62;<br>
+   <br> data-Playlist='[{<br>"name":"播放音乐的标题",<br>"path":"播放音乐的路径"<br>}]'&#62;&#60;/div&#62;<br>
 &#60;style&#62;<br>
 #Yuiplay_box {<br>
     --width:300px;<br>
