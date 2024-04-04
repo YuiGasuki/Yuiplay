@@ -171,9 +171,8 @@ const GeneratingSubject = () =>{
     */
     YuiplayAudio.ondurationchange = () =>{
         ProgressBox.max = YuiplayAudio.duration;     
-        YuiplayBodyWhole.innerText = switchingTime(YuiplayAudio.duration);
-        CombinedProgress();
-        CombinedTime();        
+        YuiplayBodyWhole.innerText = switchingTime(YuiplayAudio.duration);        
+    
     }
     
     /**
@@ -181,6 +180,8 @@ const GeneratingSubject = () =>{
      * @author Yui_ <13413925094@139.com>
      */
     YuiplayAudio.oncanplaythrough = () =>{
+        CombinedProgress();
+        CombinedTime();        
         /**
          * 按钮点击控制音乐播放
          * @author Yui_ <13413925094@139.com>
