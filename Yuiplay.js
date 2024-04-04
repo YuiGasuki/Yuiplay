@@ -112,6 +112,17 @@ const playMusic = () =>{
     }
     
     
+    const YuiplayPlayButtonOnclick = () =>{
+            if(YuiplayAudio.paused){
+YuiplayPlayButton.innerHTML = `<svg t="1706010361462" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4208" width="22" height="22" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M128 138.666667c0-47.232 33.322667-66.666667 74.176-43.562667l663.146667 374.954667c40.96 23.168 40.853333 60.8 0 83.882666L202.176 928.896C161.216 952.064 128 932.565333 128 885.333333v-746.666666z" fill="`+GetData.ThemeColor+`" p-id="4209"></path></svg>`;
+            
+            }else{
+
+            YuiplayPlayButton.innerHTML = `<svg t="1706010319077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5251" width="22" height="22" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M128 106.858667C128 94.976 137.621333 85.333333 149.12 85.333333h85.76c11.648 0 21.12 9.6 21.12 21.525334V917.12c0 11.882667-9.621333 21.525333-21.12 21.525333H149.12A21.290667 21.290667 0 0 1 128 917.141333V106.88z m640 0c0-11.882667 9.621333-21.525333 21.12-21.525334h85.76c11.648 0 21.12 9.6 21.12 21.525334V917.12c0 11.882667-9.621333 21.525333-21.12 21.525333h-85.76a21.290667 21.290667 0 0 1-21.12-21.525333V106.88z" fill="`+GetData.ThemeColor+`" p-id="5252"></path></svg>`;
+            }
+        }
+    
+    
     YuiplayAudio.onended = () =>{
     
         let Playlist = JSON.parse(YuiBox.getAttribute('data-Playlist'));  
@@ -130,29 +141,21 @@ const playMusic = () =>{
      * @author Yui_ <13413925094@139.com>
      */
     YuiplayAudio.oncanplaythrough = () =>{
+
+         
+        
         /**
          * 按钮点击控制音乐播放
          * @author Yui_ <13413925094@139.com>
          */
-         
-        const YuiplayPlayButtonOnclick = () =>{
-            if(YuiplayAudio.paused){
-            YuiplayPlayButton.innerHTML = `<svg t="1706010319077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5251" width="22" height="22" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M128 106.858667C128 94.976 137.621333 85.333333 149.12 85.333333h85.76c11.648 0 21.12 9.6 21.12 21.525334V917.12c0 11.882667-9.621333 21.525333-21.12 21.525333H149.12A21.290667 21.290667 0 0 1 128 917.141333V106.88z m640 0c0-11.882667 9.621333-21.525333 21.12-21.525334h85.76c11.648 0 21.12 9.6 21.12 21.525334V917.12c0 11.882667-9.621333 21.525333-21.12 21.525333h-85.76a21.290667 21.290667 0 0 1-21.12-21.525333V106.88z" fill="`+GetData.ThemeColor+`" p-id="5252"></path></svg>`;
-            
-            }else{
-            YuiplayPlayButton.innerHTML = `<svg t="1706010361462" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4208" width="22" height="22" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M128 138.666667c0-47.232 33.322667-66.666667 74.176-43.562667l663.146667 374.954667c40.96 23.168 40.853333 60.8 0 83.882666L202.176 928.896C161.216 952.064 128 932.565333 128 885.333333v-746.666666z" fill="`+GetData.ThemeColor+`" p-id="4209"></path></svg>`;
-            
-            }
-        }
-        
-        YuiplayPlayButton.onclick = () =>{
-            YuiplayPlayButtonOnclick();
+        YuiplayPlayButtonOnclick();
+        YuiplayPlayButton.onclick = () =>{            
             if(YuiplayAudio.paused){
             YuiplayAudio.play();
             }else{
             YuiplayAudio.pause();
             }
-            
+            YuiplayPlayButtonOnclick();
         }
     }
 }
@@ -280,7 +283,7 @@ const GeneratingSubject = () =>{
             </div>
             
         </div>
-        <audio id="Yuiplay_audio">
+        <audio id="Yuiplay_audio" autoplay="autoplay">
           <source src="`+GetData.Playlist.path+`" type="audio/mpeg" >
         </audio>
     `;
