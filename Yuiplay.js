@@ -180,7 +180,7 @@ const GeneratingSubject = () =>{
      * 检测视频是否可以播放
      * @author Yui_ <13413925094@139.com>
      */
-    YuiplayAudio.oncanplay = () =>{
+    YuiplayAudio.oncanplaythrough = () =>{
         /**
          * 按钮点击控制音乐播放
          * @author Yui_ <13413925094@139.com>
