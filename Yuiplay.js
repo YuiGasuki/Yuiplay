@@ -149,6 +149,7 @@ const GeneratingSubject = () =>{
     YuiplayAudio.currentTime = ProgressBox.value;
     YuiplayAudio.play();
     ProgressBox.addEventListener('input',CombinedProgress);
+    YuiplayPlayButtonOnclick();
     }
     
     
