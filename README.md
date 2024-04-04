@@ -11,4 +11,4 @@
     --progress:50;<br>
 }<br>
 &#60;/style&#62;
-&#60;script src='https://mykonshshhdhdhdh.github.io/Yuiplay/Yuiplay.js'&#62;&#60;/script&#62;
+&#60;script src='https://mykonshshhdhdhdh.github.io/Yuiplay/Yuiplay.js' &#62;&#60;/script&#62;
