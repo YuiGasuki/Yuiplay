@@ -327,6 +327,11 @@ const GeneratingSubject = () =>{
                 padding-top:3px;
                 margin-top:-3px;
             }
+            #Lyrics {
+                color:`+GetData.ThemeColor+`;
+                text-align:center;
+                font-size:15px;
+            }
             .progress_box {
                 width:calc(var(--width) - 16px);
                 margin-left:8px;
