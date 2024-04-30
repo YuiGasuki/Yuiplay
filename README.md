@@ -18,8 +18,8 @@
     --progress:50;/*不可修改(修改了也没啥效果，最多出现进度条偏差)*/<br>
 }<br>
 &#60;/style&#62;<br>
-&#60;script src='Yuiplay.js'&#62;&#60;/script&#62;
+&#60;script src='https://yuiandazucat.github.io/Yuiplay/Yuiplay.js'&#62;&#60;/script&#62;
 <br>
 <br>
 示例<br>
-https://mykonshshhdhdhdh.github.io/Yuiplay
+https://yuiandazucat.github.io/Yuiplay
