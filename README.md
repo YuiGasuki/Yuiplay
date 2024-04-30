@@ -2,18 +2,23 @@
 
 使用: <br>
 在项目里引入<br>
-<div style="background:#aaaaaa;overflow:auto;color:#eee;padding:32px;border-radius:8px;">
-&#60;div id="Yuiplay_box" <br>
-    data-ThemeColor="#DB000A"
-   <br> data-Playlist='[{<br>"name":"播放音乐的标题",<br>"path":"播放音乐的路径"<br>}]'&#62;&#60;/div&#62;<br>
-&#60;style&#62;<br>
-#Yuiplay_box {<br>
-    --width:300px;<br>
-    --progress:50;<br>
-}<br>
-&#60;/style&#62;<br>
-&#60;script src='https://mykonshshhdhdhdh.github.io/Yuiplay/Yuiplay.js' &#62;&#60;/script&#62;
-</div>
+&#60;div id="Yuiplay_box" 
+    data-ThemeColor="主题色"
+    data-Color="字体颜色"
+    data-ProgressColor="进度条颜色"
+    data-backgroundColor="背景颜色"
+    data-Playlist='[{
+    "name":"歌曲名称",
+    "path":"歌曲路径",
+    "lyrics":"歌词路径"
+    }]'&#62;&#60;/div&#62;
+&#60;style&#62;
+#Yuiplay_box {
+    --width:300px;/*不要小于120px*/
+    --progress:50;/*不可修改(修改了也没啥效果，最多出现进度条偏差)*/
+}
+&#60;/style&#62;
+&#60;script src='Yuiplay.js'&#62;&#60;/script&#62;
 <br>
 <br>
 示例<br>
