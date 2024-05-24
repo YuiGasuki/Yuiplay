@@ -59,14 +59,15 @@ const switchingTime = (number) =>{
     return minute+':'+second
 }
 
+/*
 /**
  * 这是标签间通讯，校对播放器信息
- */
+ *
 const channel = new BroadcastChannel('Yuiplay-1');
 
 /*
  * 监听消息，根据接收的数据改变播放器信息
- */
+ *
 channel.addEventListener('message', (e) => {
     if(!e.data){
         return
@@ -93,7 +94,7 @@ channel.addEventListener('message', (e) => {
 /*
  * 发送消息
  * @param {Number} Type 判断发送啥信息
- */
+ *
 const ProofreadSongs = (Type) =>{
     if(Type){
         const YuiplayAudio = document.getElementById('Yuiplay_audio');
@@ -111,17 +112,20 @@ const ProofreadSongs = (Type) =>{
     })
 }
 
-
+*/
 
 let datab=[];
+let translation = false;
 const GetLyricsContent = (path) =>{
 fetch(path).then((res)=>{
 if (res.ok) {
+datab=[];
 return res.text()
 }
 }).then(data =>{
 data=data.split('\n');
-
+let temporary=-1;
+let iftemporary = false;
 for(let i=0;i<data.length;i++){
 let a = data[i].split(']')[0].split('[')[1];
 let b = String(a).split(':');
@@ -137,22 +141,49 @@ d = d * 60;
 }
 }
 c=c+d;
+
 }
+if(temporary!=c){
+temporary=c;
 datab.push([c,data[i].split(']')[1]]);
+if(datab.length!=1){
+datab[datab.length-2].push("");
+}else{
+datab[datab.length-1].push("");
+}
+}else{
+iftemporary=true;
+datab[datab.length-1].push(data[i].split(']')[1]);
+}
+}
+if(iftemporary===true){
+document.getElementById('Playback_translate').style.display="inline";
+}else{
+document.getElementById('Playback_translate').style.display="none";
 }
 })
 }
 const GetLyrics = (time) =>{
 
 for(let i=0;i<datab.length;i++){
+let a=1;
+if(translation===true){
+a=2;
+}
 if(i===datab.length-1){
 if(time>=datab[i][0]){
-return datab[i][1];
+return {
+    now:datab[i][a],
+    nest:""
+    };
 break
 }
 }
 if(time>=datab[i][0]&&time<datab[i+1][0]){
-return datab[i][1];
+return {
+    now:datab[i][a],
+    nest:datab[i+1][a]
+    };
 break
 }
 }
@@ -173,8 +204,20 @@ const playMusic = () =>{
     const YuiplayBodyWhole = document.getElementById('Yuiplay_Body_Whole');
     const YuiplayBodyPresent = document.getElementById('Yuiplay_Body_Present');
     const YuiplayPlayButton = document.getElementById('Yuiplay_PlayButton');    
+    const PlaybackTranslate = document.getElementById('Playback_translate');    
     
-    
+    /**
+     * 开启译文歌词
+     */
+    PlaybackTranslate.onclick = ()=>{
+    if(translation===false){
+     document.getElementById("Playback_translate_c").setAttribute('fill',GetData.ThemeColor);
+     translation=true;
+     }else{
+     document.getElementById("Playback_translate_c").setAttribute('fill',GetData.Color);
+     translation=false;
+     }
+    }
 
     /**
      * 校对进度条
@@ -202,9 +245,11 @@ const playMusic = () =>{
         
         let Lyrics = GetLyrics(YuiplayAudio.currentTime);
         if(Lyrics){
-        document.getElementById('Lyrics').innerText=Lyrics;
+        document.getElementById('Lyrics').innerText=Lyrics.now;
+        document.getElementById('Lyrics_nest').innerText=Lyrics.nest;
         }else{
         document.getElementById('Lyrics').innerText="";
+        document.getElementById('Lyrics_nest').innerText="";
         }
         
         YuiplayBodyPresent.innerText = switchingTime(YuiplayAudio.currentTime);
@@ -218,7 +263,7 @@ const playMusic = () =>{
      * @author Yui_ <13413925094@139.com>
     */
     YuiplayAudio.ondurationchange = () =>{
-        channel.postMessage("0");
+        // channel.postMessage("0");
         ProgressBox.max = YuiplayAudio.duration;     
         YuiplayBodyWhole.innerText = switchingTime(YuiplayAudio.duration);
         CombinedProgress();
@@ -277,10 +322,10 @@ const playMusic = () =>{
         document.addEventListener('visibilitychange',function(){
             if(document.visibilityState==='visible'){
                 YuiplayAudio.play();
-                channel.postMessage("0");
+                // channel.postMessage("0");
             }else if(document.visibilityState==='hidden'){
                 YuiplayAudio.pause();
-                ProofreadSongs(1);
+                // ProofreadSongs(1);
             }
         })
         
@@ -331,6 +376,11 @@ const GeneratingSubject = () =>{
                 color:`+GetData.ThemeColor+`;
                 text-align:center;
                 font-size:15px;
+            }
+            #Lyrics_nest {
+                color:`+GetData.Color+`;
+                text-align:center;
+                font-size:13px;
             }
             .progress_box {
                 width:calc(var(--width) - 16px);
@@ -419,6 +469,11 @@ const GeneratingSubject = () =>{
                 margin-left:36px;
                 position:absolute;            
             }
+            #Playback_translate {
+                margin-left:70px;
+                margin-top:2px;
+                position:absolute;
+            }
             #Playlist_svg_Box {
                 height:22px;
                 background:`+GetData.BackgroundColor+`;
@@ -434,6 +489,7 @@ const GeneratingSubject = () =>{
         <div id="Yuiplay_Body">
             <p id="Yuiplay_Body_h1">`+GetData.Playlist.name+`</p>
             <p id="Lyrics"></p>
+            <p id="Lyrics_nest"></p>
             <div id="PlayInformation_Box">
             <div id="Yuiplay_PlayButton">
               <svg t="1706010361462" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4208" width="22" height="22" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M128 138.666667c0-47.232 33.322667-66.666667 74.176-43.562667l663.146667 374.954667c40.96 23.168 40.853333 60.8 0 83.882666L202.176 928.896C161.216 952.064 128 932.565333 128 885.333333v-746.666666z" fill="`+GetData.ThemeColor+`" p-id="4209"></path></svg>
@@ -452,6 +508,12 @@ const GeneratingSubject = () =>{
             <svg id="Yuiplay_Body_playlist_svg" t="1712217105707" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1487" width="22" height="22" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M880.245529 681.54683c3.287261 74.378806-47.322115 157.716302-134.163616 207.892194-113.067344 65.311744-244.44943 53.824391-293.469361-35.401278-47.141496-85.830035 3.034395-206.483367 116.101739-271.758986 91.356969-52.740678 193.840054-51.765337 255.936783-5.057326V117.907927c0-15.460966 12.643313-28.032032 28.104279-28.032032 15.49709 0 28.032032 12.534942 28.032032 28.032032v561.074117c0 0.86697-0.433485 1.661693-0.541856 2.564786z m-65.022754-43.492997c-39.158147-59.965428-146.517938-61.988359-230.036053-11.667972-83.518115 50.428758-123.579356 146.228948-84.421209 206.194377 39.230395 60.037676 142.869439 61.482626 226.387554 11.126115 83.518115-50.428758 127.300102-145.614845 88.069708-205.65252z m-130.767983-295.709035H179.516986c-15.49709 0-28.104279-12.534942-28.104279-28.032031 0-15.569337 12.643313-28.104279 28.104279-28.104279h504.937806c15.460966 0 28.032032 12.534942 28.032032 28.104279a28.032032 28.032032 0 0 1-28.032032 28.032031z m0-168.300561H179.516986c-15.49709 0-28.104279-12.534942-28.104279-28.032031 0-15.569337 12.643313-28.104279 28.104279-28.104279h504.937806c15.460966 0 28.032032 12.534942 28.032032 28.104279a28.032032 28.032032 0 0 1-28.032032 28.032031zM179.516986 454.509049h308.496843c15.569337 0 28.104279 12.534942 28.104279 28.104279 0 15.460966-12.534942 28.032032-28.104279 28.032031h-308.496843c-15.49709 0-28.104279-12.534942-28.104279-28.032031 0-15.533213 12.643313-28.104279 28.104279-28.104279z m0 168.336684h168.300561c15.460966 0 28.032032 12.534942 28.032031 28.104279a28.032032 28.032032 0 0 1-28.032031 28.032032H179.516986c-15.49709 0-28.104279-12.534942-28.104279-28.032032 0-15.569337 12.643313-28.104279 28.104279-28.104279z" fill="`+GetData.ThemeColor+`" p-id="1488"></path></svg>
             <div id="Playback_Mode" onclick="ModifyPlaybackMode()">
                <svg  t="1712238023977" class="icon" viewBox="0 0 1165 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4301" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18"><path d="M0.000117 218.508507a54.571099 54.571099 0 0 1 54.683154-54.683155h879.188586l-74.741115-72.612057a52.105875 52.105875 0 0 1 0-75.189338 54.683154 54.683154 0 0 1 77.318395 0l168.083466 168.083467a54.459043 54.459043 0 0 1 0 77.206339l-168.083466 168.083466a54.346988 54.346988 0 0 1-77.318395-0.896445 56.027822 56.027822 0 0 1 0-78.438951l74.741115-76.758116H54.683271A54.683154 54.683154 0 0 1 0.000117 218.508507z" fill="`+GetData.ThemeColor+`" p-id="4302"></path><path d="M0.000117 875.49075m54.683154 0l1011.078079 0q54.683154 0 54.683155 54.683154l0 0.112056q0 54.683154-54.683155 54.683154l-1011.078079 0q-54.683154 0-54.683154-54.683154l0-0.112056q0-54.683154 54.683154-54.683154Z" fill="`+GetData.ThemeColor+`" p-id="4303"></path><path d="M0.000117 539.323816m54.683154 0l1011.078079 0q54.683154 0 54.683155 54.683155l0 0.112056q0 54.683154-54.683155 54.683154l-1011.078079 0q-54.683154 0-54.683154-54.683154l0-0.112056q0-54.683154 54.683154-54.683155Z" fill="`+GetData.ThemeColor+`" p-id="4304"></path></svg>
+               </div>
+               <div id="Playback_translate">
+                    <svg t="1716560200873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1543" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" >
+                    <path  id="Playback_translate_c" d="M128 64c-35.345655 0-64 28.654345-64 64v768c0 35.345655 28.654345 64 64 64h768c35.345655 0 64-28.654345 64-64v-768c0-35.345655-28.654345-64-64-64h-768z m0-64h768C966.692487 0 1024 57.307513 1024 128v768C1024 966.692487 966.692487 1024 896 1024h-768C57.307513 1024 0 966.692487 0 896v-768C0 57.307513 57.307513 0 128 0z m329.143025 251.428487h301.715127v68.571513c-18.020046 27.895172-58.368 67.967706-96.000589 96.000589 24.064 8.704 69.777949 13.274336 137.143026 13.71336l-13.714538 68.57269c-63.360883-7.297471-123.483807-31.818152-164.572102-54.858152-43.775411 21.120294-101.211218 41.41668-164.570924 54.856975l-27.429076-68.571513c56.378851-8.492138 100.279025-12.452782 137.143026-27.427898-28.031706-24.960883-54.747513-45.038345-68.571513-82.286051h-41.142437v-68.571513z m114.85749 68.571513c12.288 25.728294 22.271411 41.183632 47.998529 60.000515 31.873471-19.969177 45.072478-35.424515 60.048772-60.000515h-108.047301zM512 512h68.571513v-41.142437h68.556211V512h68.586814v68.571513h-68.586814v41.142436h109.729251v68.57269h-109.729251v109.712772H580.57269v-109.713949h-109.71395v-68.571513h109.71395V580.57269H512V512zM306.285462 223.999411c34.286345 22.113692 81.117278 54.858152 109.713949 82.286051l-54.856974 68.57269c-21.504-26.113177-54.527411-65.665471-95.999412-96.000589l41.142437-54.856974z m137.157149 397.714538v54.856975c-56.437701 53.431614-97.586023 90.002538-123.442611 109.715127l-36.000074-58.28561c10.752-9.600883 22.285536-25.042097 22.285536-37.714979V470.857563h-82.284873v-68.572689h150.857563V662.857563c28.631982-9.103007 51.494253-22.817545 68.584459-41.143614z" fill="`+GetData.Color+`" p-id="1544">
+                    </path>
+                    </svg>
                </div>
             </div>
             <ul id="Yuiplay_Body_playlist_ul">
@@ -510,7 +572,7 @@ GeneratingSubject();//生成主体
 const SwitchSongs = (serial,judge) =>{
     if(!judge){
         PlayNumber = serial;
-        ProofreadSongs();    
+        // ProofreadSongs();    
     }    
     let Playlist = JSON.parse(YuiBox.getAttribute('data-Playlist'));  
     let GetData = GetCustomization();
@@ -540,7 +602,7 @@ const ModifyPlaybackMode = (judge) =>{
     const iDPlaybackMode = document.getElementById('Playback_Mode');     
     if(!judge){
         PlaybackMode++;
-        ProofreadSongs();
+        // ProofreadSongs();
     }
     if(PlaybackMode>=4){
         PlaybackMode=1;
