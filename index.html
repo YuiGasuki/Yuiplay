@@ -15,17 +15,22 @@ align-items:center;
 <body>
 <div id="Yuiplay_box" 
     data-ThemeColor="#DB000A"
+    data-Color="#AAAAAA"
+    data-ProgressColor="white"
+    data-backgroundColor="#eee"
     data-Playlist='[{
     "name":"相遇天使",
-    "path":"相遇天使.mp3"
+    "path":"相遇天使.mp3",
+    "lyrics":"1.bin"
     },{"name":"轻飘飘时间",
-    "path":"轻飘飘时间.mp3"},{
-    "name":"我的订书机之恋","path":"我的订书机之恋.mp3"
-    }]'></div>
+    "path":"轻飘飘时间.mp3",    "lyrics":"2.lrc"}]'></div>
 <style>
 #Yuiplay_box {
-    --width:300px;
-    --progress:50;
+    --width:300px;/*不要小于120px*/
+    --progress:50;/*不可修改(修改了也没啥效果，最多出现进度条偏差)*/
+    position:fixed;
+    top:10vh;
+    right:2vh;
 }
 </style>
 <script src='Yuiplay.js'></script>
